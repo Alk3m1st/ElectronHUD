@@ -3,6 +3,8 @@ const electron = require('electron')
 const app = electron.app
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
+const ipc = electron.ipcMain
+const launchHUD = require('./launch-hud')
 
 const path = require('path')
 const url = require('url')
@@ -23,7 +25,7 @@ function createWindow () {
   }))
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  //mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -58,3 +60,9 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+ipc.on('launch-hud', _ => {
+  launchHUD(site => {
+    mainWindow.webContents.send('launchSite', site);
+  });
+});
