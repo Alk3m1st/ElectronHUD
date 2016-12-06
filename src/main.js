@@ -4,7 +4,7 @@ const app = electron.app
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 const ipc = electron.ipcMain
-const launchHUD = require('./launch-hud')
+const cycle = require('./cycle')
 
 const path = require('path')
 const url = require('url')
@@ -58,11 +58,13 @@ app.on('activate', function () {
   }
 })
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
-
+// Wait for launch-hud event from the button
 ipc.on('launch-hud', _ => {
-  launchHUD(site => {
+  cycle(site => {
     mainWindow.webContents.send('launchSite', site);
-  });
+  },
+  [
+    { name: 'JIRA', url: 'http://www.google.com' },
+    { name: 'YouTube', url: 'http://www.youtube.com' }
+  ]);
 });
