@@ -1,4 +1,4 @@
-module.exports = function launchHUD(tick) {
+module.exports = function launchHUD(callback) {
     //console.log(tick);
     let currentSite = 0;
 
@@ -13,7 +13,7 @@ module.exports = function launchHUD(tick) {
             currentSite = 0;
         }
 
-        tick(sites[currentSite].name);
+        callback(sites[currentSite]);
         currentSite++;
     }, 10000);
 }

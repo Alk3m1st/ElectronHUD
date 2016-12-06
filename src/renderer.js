@@ -15,10 +15,10 @@ document
 
 ipc.on('launchSite', (event, site) => {
         console.log(site);
-        document.getElementById('currentSite').innerHTML = site;
+        document.getElementById('currentSite').innerHTML = site.name;
 
         console.log(site.name);
         console.log(site.url);
         
-
+        win.loadURL(site.url);
     });
