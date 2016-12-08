@@ -16,10 +16,14 @@ document
         });
     });
 
-ipc.on('launchSite', (event, site) => {
-        document.getElementById('currentSite').innerHTML = site.name;
+ipc.on('launchSite', (event, window) => {
+        //document.getElementById('currentSite').innerHTML = site.name;
         
-        win.loadURL(site.url);
+        // hide existing windows
         //win.hide();
+        console.log(window); // Not a window anymore ... :(
+        console.log(window.isVisible());
+
         //win.isVisible();
+        window.show();
     });

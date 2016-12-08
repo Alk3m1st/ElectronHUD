@@ -5,6 +5,7 @@ const app = electron.app
 const BrowserWindow = electron.BrowserWindow
 const ipc = electron.ipcMain
 const cycle = require('./cycle')
+const windowFactory = require('./windowFactory')
 
 const path = require('path')
 const url = require('url')
@@ -12,6 +13,8 @@ const url = require('url')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
+let windowArray = []
+
 
 function createWindow () {
   // Create the browser window.
@@ -23,6 +26,10 @@ function createWindow () {
     protocol: 'file:',
     slashes: true
   }))
+
+  windowArray.push(windowFactory('http://www.google.com', BrowserWindow));
+  windowArray.push(windowFactory('http://www.wikipedia.org', BrowserWindow));
+  windowArray.push(windowFactory('http://www.yahoo.com', BrowserWindow));
 
   // Open the DevTools.
   //mainWindow.webContents.openDevTools()
@@ -63,8 +70,12 @@ ipc.on('launch-hud', _ => {
   cycle(site => {
     mainWindow.webContents.send('launchSite', site);
   },
-  [
-    { name: 'JIRA', url: 'http://www.google.com' },
-    { name: 'YouTube', url: 'http://www.youtube.com' }
-  ]);
+  windowArray
+  // [
+  //   { name: 'JIRA', url: 'http://www.google.com' },
+  //   { name: 'YouTube', url: 'http://www.youtube.com' }
+  // ]
+  );
+
+  console.log(windowArray);
 });
