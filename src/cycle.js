@@ -1,14 +1,13 @@
-module.exports = function cycle(callback, array) {
+module.exports = function cycle(callback, length, interval) {
     //console.log(tick);
     let i = 0;
 
     let timer = setInterval(_ => {
-        if(i >= array.length) {
-            //clearInterval(timer);
+        if(i >= length) {
             i = 0;
         }
 
-        callback(array[i]);
+        callback(i);
         i++;
-    }, 10000);
+    }, interval);
 }

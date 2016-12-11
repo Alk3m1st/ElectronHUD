@@ -36,6 +36,12 @@ function createWindow () {
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
+    // Close all the child windows
+    windowArray.map(w => {
+      w.close();
+      w = null;
+    });
+
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
@@ -67,15 +73,29 @@ app.on('activate', function () {
 
 // Wait for launch-hud event from the button
 ipc.on('launch-hud', _ => {
-  cycle(site => {
-    mainWindow.webContents.send('launchSite', site);
+  cycle(index => {
+    // Regular interval
+    launchSite(index)
   },
-  windowArray
-  // [
-  //   { name: 'JIRA', url: 'http://www.google.com' },
-  //   { name: 'YouTube', url: 'http://www.youtube.com' }
-  // ]
-  );
-
-  console.log(windowArray);
+  windowArray.length,
+  10000);
 });
+
+function launchSite(index) {
+  console.log(index);
+  console.log(windowArray[index].isVisible())
+
+  windowArray[index].show();
+
+  preventFlash(windowArray, index);
+};
+
+function preventFlash(windowArray, index) {
+  let previousIndex = index === 0
+    ? windowArray.length - 1
+    : index - 1;
+
+  setTimeout(_ => {
+    windowArray[previousIndex].hide();
+  }, 300);
+}
